@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+urbanenv/
+*.egg-info/
+dist/
+build/
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+*.ipynb_checkpoints
+
+# Data files (too large for git)
+data/raw/
+data/processed/
+data/tiles/
+*.tif
+*.tiff
+*.geotiff
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+
+# Model files (too large)
+models/checkpoints/
+*.pth
+*.pt
+*.h5
+*.pkl
+
+# Output files
+outputs/maps/*.png
+outputs/maps/*.jpg
+outputs/tables/*.csv
+outputs/reports/*.pdf
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Streamlit
+.streamlit/secrets.toml
