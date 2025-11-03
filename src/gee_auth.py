@@ -5,13 +5,17 @@ Google Earth Engine Authentication Helper
 import ee
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables at module level
+load_dotenv()
 
 def authenticate_gee(project_id=None):
     """
     Authenticate and initialize Google Earth Engine
     
     Args:
-        project_id (str): Your GEE project ID (e.g., 'nyc-urban-sustainability')
+        project_id (str): Your GEE project ID
     
     Returns:
         bool: True if authentication successful, False otherwise
@@ -105,13 +109,19 @@ if __name__ == "__main__":
     """
     print("🛰️  Google Earth Engine Authentication Test\n")
     
-    # Get project ID from environment or use None
+    # Get project ID from environment (already loaded at top of file)
     project_id = os.getenv('GEE_PROJECT', None)
     
     if project_id:
-        print(f"Using project ID from environment: {project_id}\n")
+        print(f"✅ Found project ID in .env: {project_id}\n")
     else:
-        print("No project ID specified. Using default authentication.\n")
+        print("⚠️  No project ID found in .env file")
+        print("   Please add GEE_PROJECT=your-project-id to .env file\n")
+        project_id = input("Enter your GEE project ID: ").strip()
+        
+        if not project_id:
+            print("❌ Project ID required for GEE initialization")
+            exit(1)
     
     # Authenticate
     auth_success = authenticate_gee(project_id)

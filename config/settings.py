@@ -23,10 +23,10 @@ STUDY_AREA = {
     'name': 'Manhattan and Brooklyn',
     'boroughs': ['Manhattan', 'Brooklyn'],
     'bbox': {
-        'west': -74.05,
-        'south': 40.57,
-        'east': -73.75,
-        'north': 40.92
+        'west': -74.10,   # Expanded from -74.05
+        'south': 40.55,   # Expanded from 40.57
+        'east': -73.70,   # Expanded from -73.75
+        'north': 40.93    # Expanded from 40.92
     },
     'crs': 'EPSG:32618',  # UTM Zone 18N (appropriate for NYC)
     'resolution': 10  # meters
@@ -155,9 +155,9 @@ NYC_DATA_URLS = {
 # PROCESSING PARAMETERS
 # ==============================================================================
 TILE_CONFIG = {
-    'size': 512,  # pixels
-    'overlap': 128,  # pixels overlap between tiles
-    'min_valid_pixels': 0.7  # Minimum 70% valid data per tile
+    'size': 128,  # pixels
+    'overlap': 32,  # pixels overlap between tiles
+    'min_valid_pixels': 0.6  # Minimum 70% valid data per tile
 }
 
 # ==============================================================================
