@@ -23,9 +23,10 @@ class CarbonAnalyzer:
     
     def __init__(self):
         """Initialize analyzer"""
-        self.landcover_path = PROCESSED_DATA_DIR / 'worldcover_fixed.tif'
-        self.ndvi_path = PROCESSED_DATA_DIR / 'ndvi_fixed.tif'
-        self.lst_path = PROCESSED_DATA_DIR / 'lst_fixed.tif'
+        self.landcover_path = PROCESSED_DATA_DIR / 'worldcover_utm.tif'
+        self.ndvi_path = PROCESSED_DATA_DIR / 'ndvi_utm.tif'
+        self.lst_path = PROCESSED_DATA_DIR / 'lst_utm.tif'
+        
         
         self.boundaries_path = RAW_DATA_DIR / 'boundaries' / 'manhattan_brooklyn_boundaries.geojson'
         
