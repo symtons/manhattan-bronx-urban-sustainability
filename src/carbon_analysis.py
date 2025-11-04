@@ -23,11 +23,11 @@ class CarbonAnalyzer:
     
     def __init__(self):
         """Initialize analyzer"""
-        self.landcover_path = PROCESSED_DATA_DIR / 'worldcover_utm.tif'
-        self.ndvi_path = PROCESSED_DATA_DIR / 'ndvi_utm.tif'
-        self.lst_path = PROCESSED_DATA_DIR / 'lst_utm.tif'
         
-        
+        # Load land cover (WorldCover)
+        self.landcover_path = PROCESSED_DATA_DIR / 'worldcover_final.tif'
+        self.ndvi_path = PROCESSED_DATA_DIR / 'ndvi_final.tif'
+        self.lst_path = PROCESSED_DATA_DIR / 'lst_final.tif'
         self.boundaries_path = RAW_DATA_DIR / 'boundaries' / 'manhattan_brooklyn_boundaries.geojson'
         
         print("✅ Carbon Analyzer initialized")
@@ -194,6 +194,9 @@ class CarbonAnalyzer:
              rasterio.open(self.ndvi_path) as ndvi_src, \
              rasterio.open(self.lst_path) as lst_src:
             
+            # REPROJECT BOUNDARIES TO MATCH RASTER CRS
+            gdf = gdf.to_crs(lc_src.crs)
+            
             landcover = lc_src.read(1)
             ndvi = ndvi_src.read(1)
             lst = lst_src.read(1)
@@ -215,6 +218,11 @@ class CarbonAnalyzer:
                     masked_lc, _ = rio_mask(lc_src, [geometry], crop=False, all_touched=True)
                     borough_mask = masked_lc[0] != lc_src.nodata
                     
+                    # Skip if no valid pixels
+                    if not np.any(borough_mask):
+                        print(f"\n{borough_name}: No valid pixels found")
+                        continue
+                    
                     # Calculate statistics for this borough
                     borough_landcover = landcover_simple[borough_mask]
                     borough_ndvi = ndvi[borough_mask]
@@ -225,10 +233,11 @@ class CarbonAnalyzer:
                     built_pct = np.sum(borough_landcover == 2) / len(borough_landcover) * 100
                     
                     # NDVI stats
-                    ndvi_mean = np.mean(borough_ndvi[borough_ndvi != -9999])
+                    valid_ndvi = borough_ndvi[borough_ndvi != -9999]
+                    ndvi_mean = np.mean(valid_ndvi) if len(valid_ndvi) > 0 else 0
                     
                     # LST stats (filter out nodata)
-                    valid_lst = borough_lst[(borough_lst != 0) & (borough_lst < 100)]
+                    valid_lst = borough_lst[(borough_lst != 0) & (borough_lst < 100) & (borough_lst > -50)]
                     lst_mean = np.mean(valid_lst) if len(valid_lst) > 0 else 0
                     
                     # Carbon calculation
@@ -258,7 +267,7 @@ class CarbonAnalyzer:
                     print(f"  Carbon:      {carbon:,.0f} tCO₂/year")
                     
                 except Exception as e:
-                    print(f"  Error processing {borough_name}: {e}")
+                    print(f"\n  Error processing {borough_name}: {e}")
         
         # Save to CSV
         df = pd.DataFrame(borough_stats)

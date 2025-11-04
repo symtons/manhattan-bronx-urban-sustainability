@@ -21,7 +21,7 @@ def merge_lst_files():
     
     manhattan_lst = RAW_DATA_DIR / 'landsat' / 'manhattan_lst.tif'
     brooklyn_lst = RAW_DATA_DIR / 'landsat' / 'brooklyn_lst.tif'
-    output_path = RAW_DATA_DIR / 'landsat' / 'manhattan_brooklyn_lst.tif'
+    output_path = PROCESSED_DATA_DIR / 'lst.tif'
     
     # Check files exist
     if not manhattan_lst.exists():
